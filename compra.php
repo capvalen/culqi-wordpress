@@ -1,8 +1,3 @@
-<?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,6 +8,47 @@ error_reporting(E_ALL);
 
 </head>
 <body>
+	<style>
+	#franja{
+		background-color: #011631;
+		color: #fff;
+		font-size: 13px;
+	}
+	#franja a{color:white;}
+	#franaja-negra{ background-color: #15171A; 	color: #fff; }
+	#franaja-azul{ background-color: #011126; 	color: #fff; }
+	.table .thead-dark th {
+    color: #fff;
+    background-color: #062650;
+    border-color: #062650;
+	}
+	#btnEmpezarPago{
+		background-color: #15171a;
+	}
+	#btnEmpezarPago:hover{
+		background-color: #122d44;
+	}
+	</style>
+	<section id="franja" class="container-fluid py-3">
+		<div class="container d-flex justify-content-between">
+			<div>
+				<strong><span>975 585 816 </span> <span>ayuda@ademperu.com</span></strong>
+			</div>
+			<div>
+				<strong><a class="px-2" href="https://ademperu.com/formulario-cuenta" >Regístrese</a> <a href="https://ademperu.com/wp-login.php">Inicio de sesión</a></strong>
+			</div>
+		</div>
+	</section>
+	<section id="franaja-negra" class="container-fluid py-3">
+		<div class="container">
+			<img src="img/2020-05-08114342.png" alt="">
+		</div>
+	</section>
+	<section id="franaja-azul" class="container-fluid py-3">
+		<div class="container">
+			<img src="img/chkcompra.png" alt="">
+		</div>
+	</section>
 	<section class="container mt-5">
 	<?php
 
@@ -46,9 +82,7 @@ error_reporting(E_ALL);
 	$sql="SELECT * FROM `wp_posts` where id = {$idCurso}";
 	$resultado=$cadena->query($sql);
 	$rowCursos = $resultado->num_rows;
-	/* while(){ 
-		
-	} */
+
 	if($rowCursos ==0){
 		?> <h3>No existe, regrese a la principal y seleccione un curso.</h3>
 		<a href="https://ademperu.com/courses/">Volver</a>
@@ -63,6 +97,7 @@ error_reporting(E_ALL);
 			$linkCurso= "https://ademperu.com/cursos/".$row['post_name'];
 
 
+			
 			//Creando el post del curso
 			$sqlPedido="INSERT INTO `wp_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES
 			(NULL, '1', now(), now(), '', concat( 'Pedido en ', CURDATE() ) , '', 'lp-pending', 'closed', 'closed', '', replace(concat( 'pedido en ', CURDATE() ), ' ', '-' ), '', '', now(), now(), '', '0', 'https://ademperu.com/cursos/compra.php?destino={$idCurso}', '0', 'lp_order', '', '0');";
@@ -109,11 +144,38 @@ error_reporting(E_ALL);
 		
 
 			?>
-			<h3>Pedido: #<?= $idPostInterno; ?> </h3>
+			<p>Ud. Está empezando el proceso de pago de un curso registrado en AdemPerú.</p>
+			<p>A continuación se le solicitará los datos de su tarjeta, una vez aprobado el pago en los servidores, Ud. podrá empezar inmediatamente el curso elegido.</p>
+			<p>Detalles de la compra:</p>
+			<table class="table table-hover">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Pedido</th>
+						<th scope="col">Curso</th>
+						<th scope="col">Centro educativo</th>
+						<th scope="col">Precio</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>#<?= $idPostInterno; ?></td>
+						<td><?= $tituloCurso; ?></td>
+						<td>Adem Perú</td>
+						<td>S/ <?= number_format($rowPrecio['meta_value'], 2); ?></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- <h3>Pedido: #<?= $idPostInterno; ?> </h3>
 			<h3>Curso: <?= $tituloCurso; ?> </h3>
 			<h5>Centro educativo: Adem Perú</h5>
-			<h5>Total: S/ <?= $rowPrecio['meta_value']; ?></h5>
-			<button class="btn btn-primary btn-lg" id="btnEmpezarPago">Pagar</button>
+			<h5>Total: S/ <?= $rowPrecio['meta_value']; ?></h5> -->
+			<div class="d-flex justify-content-end">
+				<button class="btn btn-secondary btn-lg rounded-0" id="btnEmpezarPago">Completar pago</button>
+			</div>
+			<div class="d-flex justify-content-end align-items-center mt-2">
+				<p class="text-muted text-right pr-3">Procesador de compras <br> <strong>© Team Culqi</strong></p> 
+				<img src="img/1882900_original.jpg" alt="" width="50px">
+			</div>
 
 			<?php
 		}else{
@@ -188,7 +250,7 @@ error_reporting(E_ALL);
 				//alert('Se ha creado un token:' + token);
 				//En esta linea de codigo debemos enviar el "Culqi.token.id" hacia tu servidor con Ajax
 				let data = {producto: 'Curso: <?= $tituloCurso; ?>', precio: <?= $rowPrecio['meta_value']*100; ?>, token: token, correo: email, post: <?= $idPostInterno; ?>, curso: <?= $idCurso; ?>, cliente: <?= $_GET['cliente'];?> };
-				let url = 'proceso.php';
+				let url = 'https://ademperu.com/cursos/proceso.php';
 				$.post(url, data, function(resp){
 					console.log( resp );
 					if(resp == 'Gracias'){

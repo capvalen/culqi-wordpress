@@ -6,7 +6,7 @@ global $wpdb;
 $salto="<br>";
 
 if($_POST){
-	$usuario = $wpdb->prepare($_POST['usuario']); // "calinfa2";
+	$usuario = $wpdb->prepare($_POST['dni']); // "calinfa2";
 	$correo = $wpdb->prepare($_POST['correo']);
 	$error='';
 	
@@ -112,14 +112,43 @@ if( strlen($error)>0){
 		
 	<div id="divPrimeraParte">	
 		<h3>Datos personales</h3>
-		<input type="text" placeholder="Usuario" v-bind:class="{'falta': faltaUsuario}" v-model="usuario" name="usuario">
+		<!-- <input type="text" placeholder="Usuario" v-bind:class="{'falta': faltaUsuario}" v-model="usuario" name="usuario"> -->
 		<input type="text" placeholder="Nombres completos" v-bind:class="{'falta': faltaNombre}" v-model="nombres" name="nombres">
 		<input type="text" placeholder="Apellidos completos"v-bind:class="{'falta': faltaApellidos}"  v-model="apellidos" name="apellidos">
 		<input type="text" placeholder="D.N.I." v-bind:class="{'falta': faltaDni}" v-model="dni" name="dni">
 		<input type="email" placeholder="Correo electrónico" v-bind:class="{'falta': faltaCorreo}" v-model="correo" name="correo">
 		<input type="text" placeholder="Número de celular" v-bind:class="{'falta': faltaCelular}" v-model="celular" name="celular">
 		<input type="number" placeholder="Edad" v-bind:class="{'falta': faltaEdad}" v-model="edad" name="edad">
-		<input type="text" placeholder="Departamento" v-bind:class="{'falta': faltaDepartamento}" v-model="departamento" name="departamento">
+		<div class="form-group">
+			<label for="">Departamento</label>
+			<select placeholder="Departamento" v-bind:class="{'falta': faltaDepartamento}" v-model="departamento" name="departamento" style="width:100%">
+			<option value="Amazonas">Amazonas</option>
+			<option value="Ancash">Ancash</option>
+			<option value="Apurimac">Apurimac</option>
+			<option value="Arequipa">Arequipa</option>
+			<option value="Ayacucho">Ayacucho</option>
+			<option value="Cajamarca">Cajamarca</option>
+			<option value="Callao">Callao</option>
+			<option value="Cusco">Cusco</option>
+			<option value="Huancavelica">Huancavelica</option>
+			<option value="Huanuco">Huanuco</option>
+			<option value="Ica">Ica</option>
+			<option value="Junin">Junin</option>
+			<option value="La Libertad">La Libertad</option>
+			<option value="Lambayeque">Lambayeque</option>
+			<option value="Lima">Lima</option>
+			<option value="Loreto">Loreto</option>
+			<option value="Madre De Dios">Madre De Dios</option>
+			<option value="Moquegua">Moquegua</option>
+			<option value="Pasco">Pasco</option>
+			<option value="Piura">Piura</option>
+			<option value="Puno">Puno</option>
+			<option value="San Martin">San Martin</option>
+			<option value="Tacna">Tacna</option>
+			<option value="Tumbes">Tumbes</option>
+			<option value="Ucayali">Ucayali</option>n>
+			</select>
+		</div>
 		<input type="text" placeholder="Provincia" v-bind:class="{'falta': faltaProvincia}" v-model="provincia" name="provincia">
 		<input type="text" placeholder="Distrito" v-bind:class="{'falta': faltaDistrito}" v-model="distrito" name="distrito">
 		<div class="cajaBoton" data-prox="2" @click="validar(2)">
@@ -182,8 +211,8 @@ var app = new Vue({
 			if(hacia==2){
 				var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-				if(this.usuario==''){ this.faltaUsuario=true; }
-				else if(this.nombres==''){ this.faltaNombre=true; }
+				/* if(this.usuario==''){ this.faltaUsuario=true; } */
+				if(this.nombres==''){ this.faltaNombre=true; }
 				else if(this.apellidos==''){ this.faltaApellidos=true; }
 				else if(this.dni==''){ this.faltaDni=true; }
 				else if(this.correo=='' || !this.correo.match(mailformat)){ this.faltaCorreo=true; }

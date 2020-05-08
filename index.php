@@ -13,6 +13,11 @@ if( isset($_GET['cliente']) && isset($_GET['curso']) ):
 	$idCurso= $_GET['curso'];
 	$idCliente = $_GET['cliente'];
 
+
+	$sqlNombre= "SELECT noombreCompleto FROM `wp_users` where id = {$idCliente};";
+	$resultadoNombre=$cadena->query($sqlNombre);
+	$rowNombre=$resultadoNombre->fetch_assoc();
+
 	$sqlEnlace= "SELECT ref_id, start_time, end_time FROM `wp_learnpress_user_items` where user_id = '{$idCliente}' and item_id ='{$idCurso}' and ref_type = 'lp_order'; ";
 	$resultadoEnlace=$cadena->query($sqlEnlace);
 	$rowEnlace=$resultadoEnlace->fetch_assoc();
@@ -55,7 +60,7 @@ $pdf->Image('imgs/modelo_fondo.png',0,0, 210, 300);
 
 $pdf->SetFont('Arial','B',18);
 $pdf->SetXY(55, 70);
-$nombre = utf8_decode('Carlos Alex Pariona Valencia');
+$nombre = utf8_decode( $rowNombre['$rowNombre'] );
 $w = $pdf->GetStringWidth( $nombre )+6;
 $pdf->SetX((210-$w)/2);
 $pdf->Cell($w,9,$nombre );
