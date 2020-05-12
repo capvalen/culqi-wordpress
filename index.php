@@ -18,7 +18,7 @@ if( isset($_GET['cliente']) && isset($_GET['curso']) ):
 	$resultadoNombre=$cadena->query($sqlNombre);
 	$rowNombre=$resultadoNombre->fetch_assoc();
 
-	$sqlEnlace= "SELECT ref_id, start_time, end_time FROM `wp_learnpress_user_items` where user_id = '{$idCliente}' and item_id ='{$idCurso}' and ref_type = 'lp_order'; ";
+	$sqlEnlace= "SELECT ref_id, start_time, start_time_gmt FROM `wp_learnpress_user_items` where user_id = '{$idCliente}' and item_id ='{$idCurso}' and ref_type = 'lp_order'; ";
 	$resultadoEnlace=$cadena->query($sqlEnlace);
 	$rowEnlace=$resultadoEnlace->fetch_assoc();
 	$numEnlaces = $resultadoEnlace->num_rows;
@@ -41,7 +41,7 @@ if( isset($_GET['cliente']) && isset($_GET['curso']) ):
 	$rowDuracion=$resultadoDuracion->fetch_assoc();
 
 	$fechaComienza = new DateTime($rowEnlace['start_time']);
-	$fechaFin = new DateTime($rowEnlace['end_time']);
+	$fechaFin = new DateTime($rowEnlace['start_time_gmt']);
 	if( $fechaFin == '0000-00-00 00:00:00' ){
 		imprimirError();
 		exit();
@@ -60,7 +60,7 @@ $pdf->Image('imgs/modelo_fondo.png',0,0, 210, 300);
 
 $pdf->SetFont('Arial','B',18);
 $pdf->SetXY(55, 70);
-$nombre = utf8_decode( $rowNombre['$rowNombre'] );
+$nombre = strtoupper(utf8_decode( $rowNombre['noombreCompleto'] ));
 $w = $pdf->GetStringWidth( $nombre )+6;
 $pdf->SetX((210-$w)/2);
 $pdf->Cell($w,9,$nombre );

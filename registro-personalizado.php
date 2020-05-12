@@ -2,6 +2,7 @@
 /* Template Name: Registro personalizado */
 //var_dump($_POST);
 global $wpdb;
+//include "https://ademperu.com/certificados/infocat.php";
 
 $salto="<br>";
 
@@ -121,36 +122,24 @@ if( strlen($error)>0){
 		<input type="number" placeholder="Edad" v-bind:class="{'falta': faltaEdad}" v-model="edad" name="edad">
 		<div class="form-group">
 			<label for="">Departamento</label>
-			<select placeholder="Departamento" v-bind:class="{'falta': faltaDepartamento}" v-model="departamento" name="departamento" style="width:100%">
-			<option value="Amazonas">Amazonas</option>
-			<option value="Ancash">Ancash</option>
-			<option value="Apurimac">Apurimac</option>
-			<option value="Arequipa">Arequipa</option>
-			<option value="Ayacucho">Ayacucho</option>
-			<option value="Cajamarca">Cajamarca</option>
-			<option value="Callao">Callao</option>
-			<option value="Cusco">Cusco</option>
-			<option value="Huancavelica">Huancavelica</option>
-			<option value="Huanuco">Huanuco</option>
-			<option value="Ica">Ica</option>
-			<option value="Junin">Junin</option>
-			<option value="La Libertad">La Libertad</option>
-			<option value="Lambayeque">Lambayeque</option>
-			<option value="Lima">Lima</option>
-			<option value="Loreto">Loreto</option>
-			<option value="Madre De Dios">Madre De Dios</option>
-			<option value="Moquegua">Moquegua</option>
-			<option value="Pasco">Pasco</option>
-			<option value="Piura">Piura</option>
-			<option value="Puno">Puno</option>
-			<option value="San Martin">San Martin</option>
-			<option value="Tacna">Tacna</option>
-			<option value="Tumbes">Tumbes</option>
-			<option value="Ucayali">Ucayali</option>n>
+			<select id="sltDepartamentos" placeholder="Departamento" v-bind:class="{'falta': faltaDepartamento}" v-model="departamento" name="departamento" style="width:100%" @change="cambiarProvincias($event)">
+				<option v-for="depa in listaDepartamentos" :value="depa.name" :data-valor="depa.id">{{depa.name}}</option>
 			</select>
 		</div>
-		<input type="text" placeholder="Provincia" v-bind:class="{'falta': faltaProvincia}" v-model="provincia" name="provincia">
-		<input type="text" placeholder="Distrito" v-bind:class="{'falta': faltaDistrito}" v-model="distrito" name="distrito">
+		<div class="form-group">
+			<label for="">Provincia</label>
+			<select id="sltProvincias" placeholder="Provincia" v-bind:class="{'falta': faltaProvincia}" v-model="provincia" name="provincia" style="width:100%" @change="cambiarDistritos($event)">
+				<option v-for="provi in listaProvincias" v-if="depaSeleccionado== provi.department_id" :value="provi.name" :data-valor="provi.id">{{provi.name}}</option>
+			</select>
+		</div>
+		
+		<div class="form-group">
+			<label for="">Distrito</label>
+			<select placeholder="Distrito" v-bind:class="{'falta': faltaDistrito}" v-model="distrito" name="distrito" style="width:100%" @change="">
+				<option v-for="distri in listaDistritos" v-if="distri.province_id == proviSeleccionado  && distri.department_id == depaSeleccionado " :value="distri.name" :data-valor="distri.id">{{distri.name}}</option>
+			</select>
+		</div>
+		
 		<div class="cajaBoton" data-prox="2" @click="validar(2)">
 			<span><i class="fa fa-chevron-right" aria-hidden="true"></i> <span>Continuar</span> </span>
 		</div>
@@ -205,7 +194,8 @@ var app = new Vue({
 	data: {
 		usuario: '', nombres: '', apellidos: '', dni: '', correo: '', celular: '', edad: '', departamento: '', provincia: '', distrito: '', grado: '', labora: '', cargo: '', areas: '', redes: '', institucion: '', labora_futuro: '',
 		
-		faltaUsuario:false, faltaNombre: false, faltaApellidos:false, faltaDni:false, faltaCorreo:false, faltaCelular:false, faltaEdad: false, faltaDepartamento: false, faltaProvincia: false, faltaDistrito: false, faltaGrado: false, faltaLabora: false, faltaCargo: false, faltaInstitucion: false, faltaLabora_futuro: false, faltaAreas: false, faltaRedes: false },
+		faltaUsuario:false, faltaNombre: false, faltaApellidos:false, faltaDni:false, faltaCorreo:false, faltaCelular:false, faltaEdad: false, faltaDepartamento: false, faltaProvincia: false, faltaDistrito: false, faltaGrado: false, faltaLabora: false, faltaCargo: false, faltaInstitucion: false, faltaLabora_futuro: false, faltaAreas: false, faltaRedes: false, listaDepartamentos:[], listaProvincias:[], listaDistritos:[], depaSeleccionado:-1, proviSeleccionado:-1,
+	},
 	methods:{
 		validar(hacia){ console.log('Empezando valir')
 			if(hacia==2){
@@ -220,7 +210,7 @@ var app = new Vue({
 				else if(this.edad==''){ this.faltaEdad=true; }
 				else if(this.departamento==''){ this.faltaDepartamento=true; }
 				else if(this.provincia==''){ this.faltaProvincia=true; }
-				else if(this.distrito==''){ this.faltaDistrito=true; }
+				/* else if(this.distrito==''){ this.faltaDistrito=true; } */
 				else{
 					jQuery('#divPrimeraParte').addClass('hidden'); jQuery('#divSegundaParte').addClass('animated bounceIn').removeClass('hidden')
 				}
@@ -244,7 +234,18 @@ var app = new Vue({
 					jQuery('#formPrincipal').submit();
 				}
 			}
-		}
+		},
+		cambiarProvincias(e){ this.depaSeleccionado = jQuery('#sltDepartamentos').find("option:selected").data('valor'); },
+		cambiarDistritos(event){ this.proviSeleccionado = jQuery('#sltProvincias').find("option:selected").data('valor'); }
 	}
-})
+});
+jQuery.getJSON('https://ademperu.com/cursos/ubigeo_peru_2016_departamentos.json', function (json) {
+	app.listaDepartamentos = json;
+});
+jQuery.getJSON('https://ademperu.com/cursos/ubigeo_peru_2016_provincias.json', function (json) {
+	app.listaProvincias = json;
+});
+jQuery.getJSON('https://ademperu.com/cursos/ubigeo_peru_2016_distritos.json', function (json) {
+	app.listaDistritos = json;
+});
 </script>
