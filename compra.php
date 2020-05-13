@@ -92,7 +92,14 @@
 		if( $row['post_type']=='lp_course' ){
 			$sqlPrecio="SELECT meta_value FROM `wp_postmeta` where post_id = {$idCurso} and meta_key = '_lp_price'; ";
 			$resultadoPrecio=$cadena->query($sqlPrecio);
-			$rowPrecio=$resultadoPrecio->fetch_assoc();
+			if( $resultadoPrecio->num_rows==0 ){
+				$precioCurso = 0;
+				$gratis = true;
+			}else{
+				$rowPrecio=$resultadoPrecio->fetch_assoc();
+				$precioCurso = $rowPrecio['meta_value'];
+				$gratis = false;
+			}
 			$tituloCurso= $row['post_title'];
 			$linkCurso= "https://ademperu.com/cursos/".$row['post_name'];
 
@@ -111,8 +118,8 @@
 			(null, {$idPostInterno}, '_edit_lock', concat(unix_timestamp(),':386') ),
 			(null, {$idPostInterno}, '_order_currency', 'PEN' ),
 			(null, {$idPostInterno}, '_prices_include_tax', 'no' ),
-			(null, {$idPostInterno}, '_order_subtotal', {$rowPrecio['meta_value']} ),
-			(null, {$idPostInterno}, '_order_total', {$rowPrecio['meta_value']} ),
+			(null, {$idPostInterno}, '_order_subtotal', {$precioCurso} ),
+			(null, {$idPostInterno}, '_order_total', {$precioCurso} ),
 			(null, {$idPostInterno}, '_order_key', 'ORDER{$idPostInterno}' ),
 			(null, {$idPostInterno}, '_payment_method', '' ),
 			(null, {$idPostInterno}, '_payment_method_title', '' ),
@@ -134,10 +141,10 @@
 			$idPedido = $esclavo ->insert_id;
 
 			$sqlDetalles="INSERT INTO `wp_learnpress_order_itemmeta`(`meta_id`, `learnpress_order_item_id`, `meta_key`, `meta_value`) VALUES
-			(null, {$idPedido}, '_subtotal', {$rowPrecio['meta_value']} ),
+			(null, {$idPedido}, '_subtotal', {$precioCurso} ),
 			(null, {$idPedido}, '_quantity', 1 ),
 			(null, {$idPedido}, '_course_id', {$idCurso} ),
-			(null, {$idPedido}, '_total', {$rowPrecio['meta_value']} ); ";
+			(null, {$idPedido}, '_total', {$precioCurso} ); ";
 			$resultadoDetalles=$cadena->query($sqlDetalles);
 			
 
@@ -161,14 +168,14 @@
 						<td>#<?= $idPostInterno; ?></td>
 						<td><?= $tituloCurso; ?></td>
 						<td>Adem Perú</td>
-						<td>S/ <?= number_format($rowPrecio['meta_value'], 2); ?></td>
+						<td data-precio="<?= $precioCurso; ?>">S/ <?= number_format($precioCurso, 2); ?></td>
 					</tr>
 				</tbody>
 			</table>
 			<!-- <h3>Pedido: #<?= $idPostInterno; ?> </h3>
 			<h3>Curso: <?= $tituloCurso; ?> </h3>
 			<h5>Centro educativo: Adem Perú</h5>
-			<h5>Total: S/ <?= $rowPrecio['meta_value']; ?></h5> -->
+			<h5>Total: S/ <?= $precioCurso; ?></h5> -->
 			<div class="d-flex justify-content-end">
 				<button class="btn btn-secondary btn-lg rounded-0" id="btnEmpezarPago">Completar pago</button>
 			</div>
@@ -227,6 +234,7 @@
 <script src="https://checkout.culqi.com/js/v3"></script>
 
 <script>
+<?php if( $precioCurso > 0){ ?>
 		// Configura tu llave pública
 		Culqi.publicKey = 'pk_test_ee1ae9ee0bb87081';
 		// Configura tu Culqi Checkout
@@ -234,7 +242,7 @@
 				title: 'ADEMPERU',
 				currency: 'PEN',
 				description: 'Curso: <?= $tituloCurso; ?>',
-				amount: <?= $rowPrecio['meta_value']*100; ?>
+				amount: <?= $precioCurso*100; ?>
 		});
 		// Usa la funcion Culqi.open() en el evento que desees
 		$('#btnEmpezarPago').on('click', function(e) {
@@ -249,7 +257,7 @@
 				var email = Culqi.token.email;
 				//alert('Se ha creado un token:' + token);
 				//En esta linea de codigo debemos enviar el "Culqi.token.id" hacia tu servidor con Ajax
-				let data = {producto: 'Curso: <?= $tituloCurso; ?>', precio: <?= $rowPrecio['meta_value']*100; ?>, token: token, correo: email, post: <?= $idPostInterno; ?>, curso: <?= $idCurso; ?>, cliente: <?= $_GET['cliente'];?> };
+				let data = {producto: 'Curso: <?= $tituloCurso; ?>', precio: <?= $precioCurso*100; ?>, token: token, correo: email, post: <?= $idPostInterno; ?>, curso: <?= $idCurso; ?>, cliente: <?= $_GET['cliente'];?> };
 				let url = 'https://ademperu.com/cursos/proceso.php';
 				$.post(url, data, function(resp){
 					console.log( resp );
@@ -265,7 +273,25 @@
 					console.log(Culqi.error);
 					alert(Culqi.error.user_message);
 			}
-	};
+		};
+<?php }else{ ?>
+	$('#btnEmpezarPago').on('click', function(e) {
+		var token = '';
+		var email = '';
+		//alert('Se ha creado un token:' + token);
+		//En esta linea de codigo debemos enviar el "Culqi.token.id" hacia tu servidor con Ajax
+		let data = {producto: 'Curso: <?= $tituloCurso; ?>', precio: 0, token: token, correo: email, post: <?= $idPostInterno; ?>, curso: <?= $idCurso; ?>, cliente: <?= $_GET['cliente'];?> };
+		let url = 'https://ademperu.com/cursos/proceso.php';
+		$.post(url, data, function(resp){
+			console.log( resp );
+			if(resp == 'Gracias'){
+				$('#modalPagoBien').modal('show');
+			}else{
+				$('#modalPagoMal').modal('show');
+			}
+		});
+	});
+<?php } ?>
 </script>
 
 </body>
