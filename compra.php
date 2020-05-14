@@ -46,7 +46,7 @@
 	</section>
 	<section id="franaja-azul" class="container-fluid py-3">
 		<div class="container">
-			<img src="img/chkcompra.png" alt="">
+			<img class="img-fluid" src="img/chkcompra.png" alt="">
 		</div>
 	</section>
 	<section class="container mt-5">
