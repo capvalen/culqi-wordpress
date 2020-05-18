@@ -47,7 +47,22 @@ if($_POST){
 		$cadena->set_charset("utf8");
 		mysqli_set_charset($cadena,"utf8");
 
-		$sqlCompleto="UPDATE `wp_users` SET `noombreCompleto` ='{$_POST['nombres']} {$_POST['apellidos']}' where `ID` = '{$idUsuario}'";
+		$sqlCompleto="UPDATE `wp_users` SET `noombreCompleto` ='{$_POST['nombres']} {$_POST['apellidos']}',
+			usDni = '{$_POST['dni']}',
+			usCorreo = '{$_POST['correo']}',
+			usCelular = '{$_POST['celular']}',
+			usEdad = '{$_POST['edad']}',
+			usDepartamento = '{$_POST['departamento']}',
+			usProvincia = '{$_POST['provincia']}',
+			usDistrito = '{$_POST['distrito']}',
+			usGrado = '{$_POST['grado']}',
+			usLabora = '{$_POST['labora']}',
+			usCargo = '{$_POST['cargo']}',
+			usInstitucion = '{$_POST['institucion']}',
+			usDesea = '{$_POST['labora_futuro']}',
+			usAreas = '{$_POST['areas']}',
+			usEntero = '{$_POST['redes']}'
+		where `ID` = '{$idUsuario}'";
 			//echo $sqlPedido;
 		$resultadoCompleto=$cadena->query($sqlCompleto);
 
