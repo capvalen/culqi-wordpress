@@ -11,9 +11,9 @@ include_once dirname(__FILE__).'/culqi-php/lib/culqi.php';
 $server="localhost";
 
 /* Net	*/
-$username="";
-$password="";
-$db = "";
+$username="oxlrrisl_adem";
+$password="Mantis1322!";
+$db = "oxlrrisl_adem";
 
 $cadena= mysqli_connect($server,$username,$password)or die("No se ha podido establecer la conexion");
 $sdb= mysqli_select_db($cadena,$db)or die("La base de datos no existe");
@@ -26,6 +26,8 @@ $esclavo->set_charset("utf8");
 
 try {
 
+	$pVenta =  $_POST['precio'];
+	if( $_POST['especial']>0 ){ $pVenta = $_POST['especial']; }
 	if ( floatval($_POST['precio']) == 0 ){ $gratis = true;
 	}else{ $gratis = false; //decimos que es de pago y procesamos con Culqi
 	
@@ -36,7 +38,7 @@ try {
 	// Creamos Cargo a una tarjeta
 	$charge = $culqi->Charges->create(
 		array(
-			"amount" => $_POST['precio'],
+			"amount" => $pVenta ,
 			"capture" => true,
 			"currency_code" => "PEN",
 			"description" => $_POST['producto'],

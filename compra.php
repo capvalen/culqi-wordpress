@@ -55,9 +55,9 @@
 	$server="localhost";
 
 	/* Net	*/
-	$username="";
-	$password="";
-	$db = "";
+	$username="oxlrrisl_adem";
+	$password="Mantis1322!";
+	$db = "oxlrrisl_adem";
 
 	$cadena= mysqli_connect($server,$username,$password)or die("No se ha podido establecer la conexion");
 	$sdb= mysqli_select_db($cadena,$db)or die("La base de datos no existe");
@@ -98,6 +98,16 @@
 			}else{
 				$rowPrecio=$resultadoPrecio->fetch_assoc();
 				$precioCurso = $rowPrecio['meta_value'];
+				//vemos si tiene descuento
+				$sqlDescuento="SELECT meta_value FROM `wp_postmeta` where post_id = {$idCurso} and meta_key =  '_lp_sale_price';";
+				$resultadoDescuento=$alumno->query($sqlDescuento);
+				if($resultadoDescuento->num_rows>0){
+					$rowDescuento=$resultadoDescuento->fetch_assoc();
+					$precioEspecial = $rowDescuento['meta_value'];
+				}else{
+					$precioEspecial = 0;
+				}
+				
 				$gratis = false;
 			}
 			$tituloCurso= $row['post_title'];
@@ -154,24 +164,28 @@
 			<p>Ud. Está empezando el proceso de pago de un curso registrado en AdemPerú.</p>
 			<p>A continuación se le solicitará los datos de su tarjeta, una vez aprobado el pago en los servidores, Ud. podrá empezar inmediatamente el curso elegido.</p>
 			<p>Detalles de la compra:</p>
-			<table class="table table-hover">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col">Pedido</th>
-						<th scope="col">Curso</th>
-						<th scope="col">Centro educativo</th>
-						<th scope="col">Precio</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>#<?= $idPostInterno; ?></td>
-						<td><?= $tituloCurso; ?></td>
-						<td>Adem Perú</td>
-						<td data-precio="<?= $precioCurso; ?>">S/ <?= number_format($precioCurso, 2); ?></td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">Pedido</th>
+							<th scope="col">Curso</th>
+							<th scope="col">Centro educativo</th>
+							<th scope="col">Precio</th>
+							<th scope="col">Promoción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>#<?= $idPostInterno; ?></td>
+							<td><?= $tituloCurso; ?></td>
+							<td>Adem Perú</td>
+							<td data-precio="<?= $precioCurso; ?>">S/ <?= number_format($precioCurso, 2); ?></td>
+							<td data-precio="<?= $precioEspecial; ?>">S/ <?= number_format($precioEspecial, 2); ?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			<!-- <h3>Pedido: #<?= $idPostInterno; ?> </h3>
 			<h3>Curso: <?= $tituloCurso; ?> </h3>
 			<h5>Centro educativo: Adem Perú</h5>
@@ -234,7 +248,9 @@
 <script src="https://checkout.culqi.com/js/v3"></script>
 
 <script>
-<?php if( $precioCurso > 0){ ?>
+<?php if( $precioCurso > 0){
+	if($precioEspecial>0){ $precioCurso =  $precioEspecial; }
+	?>
 		// Configura tu llave pública
 		Culqi.publicKey = 'pk_test_ee1ae9ee0bb87081';
 		// Configura tu Culqi Checkout
@@ -257,7 +273,7 @@
 				var email = Culqi.token.email;
 				//alert('Se ha creado un token:' + token);
 				//En esta linea de codigo debemos enviar el "Culqi.token.id" hacia tu servidor con Ajax
-				let data = {producto: 'Curso: <?= $tituloCurso; ?>', precio: <?= $precioCurso*100; ?>, token: token, correo: email, post: <?= $idPostInterno; ?>, curso: <?= $idCurso; ?>, cliente: <?= $_GET['cliente'];?> };
+				let data = {producto: 'Curso: <?= $tituloCurso; ?>', precio: <?= $precioCurso*100; ?>, especial: <?= $precioEspecial*100;?>, token: token, correo: email, post: <?= $idPostInterno; ?>, curso: <?= $idCurso; ?>, cliente: <?= $_GET['cliente'];?> };
 				let url = 'https://ademperu.com/cursos/proceso.php';
 				$.post(url, data, function(resp){
 					console.log( resp );
@@ -280,7 +296,7 @@
 		var email = '';
 		//alert('Se ha creado un token:' + token);
 		//En esta linea de codigo debemos enviar el "Culqi.token.id" hacia tu servidor con Ajax
-		let data = {producto: 'Curso: <?= $tituloCurso; ?>', precio: 0, token: token, correo: email, post: <?= $idPostInterno; ?>, curso: <?= $idCurso; ?>, cliente: <?= $_GET['cliente'];?> };
+		let data = {producto: 'Curso: <?= $tituloCurso; ?>', precio: 0, token: token, correo: email, especial:0, post: <?= $idPostInterno; ?>, curso: <?= $idCurso; ?>, cliente: <?= $_GET['cliente'];?> };
 		let url = 'https://ademperu.com/cursos/proceso.php';
 		$.post(url, data, function(resp){
 			console.log( resp );

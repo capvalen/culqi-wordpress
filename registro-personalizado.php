@@ -39,9 +39,9 @@ if($_POST){
 
 		/*Guardando nombre completo del usuario en la DB */
 		$server="localhost";
-		$username="";
-		$password="";
-		$db = "";
+		$username="oxlrrisl_adem";
+		$password="Mantis1322!";
+		$db = "oxlrrisl_adem";
 		$cadena= mysqli_connect($server,$username,$password)or die("No se ha podido establecer la conexion");
 		$sdb= mysqli_select_db($cadena,$db)or die("La base de datos no existe");
 		$cadena->set_charset("utf8");
@@ -123,18 +123,18 @@ if( strlen($error)>0){
 <?php else: ?>
 <form method="post" id="formPrincipal">
 <div id="divFormularioPrimero">
-	<h1>Registro para ADEMPERU</h1>
-	<p class="sub-heading">Para registrarse, rellene el cuestionario</p>
+	<h1>REGISTRATE Y ACCEDE A VARIEDAD DE CURSOS</h1>
+	<p class="sub-heading">Estos datos son necesarios para ofrecerte los cursos, a la medida de tu perfil y espectativas profesionales.</p>
 		
 	<div id="divPrimeraParte">	
 		<h3>Datos personales</h3>
 		<!-- <input type="text" placeholder="Usuario" v-bind:class="{'falta': faltaUsuario}" v-model="usuario" name="usuario"> -->
 		<input type="text" placeholder="Nombres completos" v-bind:class="{'falta': faltaNombre}" v-model="nombres" name="nombres">
-		<input type="text" placeholder="Apellidos completos"v-bind:class="{'falta': faltaApellidos}"  v-model="apellidos" name="apellidos">
-		<input type="text" placeholder="D.N.I." v-bind:class="{'falta': faltaDni}" v-model="dni" name="dni">
-		<input type="email" placeholder="Correo electrónico" v-bind:class="{'falta': faltaCorreo}" v-model="correo" name="correo">
-		<input type="text" placeholder="Número de celular" v-bind:class="{'falta': faltaCelular}" v-model="celular" name="celular">
-		<input type="number" placeholder="Edad" v-bind:class="{'falta': faltaEdad}" v-model="edad" name="edad">
+		<input type="text" placeholder="Apellidos completos"v-bind:class="{'falta': faltaApellidos}"  v-model="apellidos" name="apellidos" >
+		<input type="text" placeholder="D.N.I." v-bind:class="{'falta': faltaDni}" v-model="dni" name="dni" >
+		<input type="email" placeholder="Correo electrónico" v-bind:class="{'falta': faltaCorreo}" v-model="correo" name="correo" >
+		<input type="text" placeholder="Número de celular" v-bind:class="{'falta': faltaCelular}" v-model="celular" name="celular" >
+		<input type="number" placeholder="Edad" v-bind:class="{'falta': faltaEdad}" v-model="edad" name="edad" >
 		<div class="form-group">
 			<label for="">Departamento</label>
 			<select id="sltDepartamentos" placeholder="Departamento" v-bind:class="{'falta': faltaDepartamento}" v-model="departamento" name="departamento" style="width:100%" @change="cambiarProvincias($event)">
@@ -162,12 +162,12 @@ if( strlen($error)>0){
 		
 	<div class="hidden" id="divSegundaParte">
 		<h3>Datos del centro laboral</h3>
-		<input type="text" placeholder="¿Cuál es su grado de estudios?" v-bind:class="{'falta': faltaGrado}"  v-model="grado" name="grado">
-		<input type="text" placeholder="¿Dónde labora actualmente?" v-bind:class="{'falta': faltaLabora}"  v-model="labora" name="labora">
-		<input type="text" placeholder="¿Qué cargo ostenta?" v-bind:class="{'falta': faltaCargo}"  v-model="cargo" name="cargo">
+		<input type="text" placeholder="¿Cuál es su grado de estudios?" v-bind:class="{'falta': faltaGrado}"  v-model="grado" name="grado" >
+		<input type="text" placeholder="¿Dónde labora actualmente?" v-bind:class="{'falta': faltaLabora}"  v-model="labora" name="labora" >
+		<input type="text" placeholder="¿Qué cargo ostenta?" v-bind:class="{'falta': faltaCargo}"  v-model="cargo" name="cargo" >
 		<label>Según sus expectativas laborales</label>
-		<input type="text" placeholder="¿En qué institución desea laborar?" v-bind:class="{'falta': faltaInstitucion}" v-model="institucion" name="institucion">
-		<input type="text" placeholder="¿En qué cargo desea laborar?" v-bind:class="{'falta': faltaLabora_futuro}" v-model="labora_futuro" name="labora_futuro">
+		<input type="text" placeholder="¿En qué institución desea laborar?" v-bind:class="{'falta': faltaInstitucion}" v-model="institucion" name="institucion" >
+		<input type="text" placeholder="¿En qué cargo desea laborar?" v-bind:class="{'falta': faltaLabora_futuro}" v-model="labora_futuro" name="labora_futuro" >
 		<div class="cajaBoton" data-prox="3" @click="validar(3)">
 			<span><i class="fa fa-chevron-right" aria-hidden="true"></i> <span>Continuar</span> </span>
 		</div>
@@ -207,7 +207,11 @@ if( strlen($error)>0){
 var app = new Vue({
   el: '#divFormularioPrimero',
 	data: {
+		<?php if($_POST): ?>
+		usuario: '<?= $_POST['dni']; ?>', nombres: '<?= $_POST['nombres']; ?>', apellidos: '<?= $_POST['apellidos']; ?>', dni: '<?= $_POST['dni']; ?>', correo: '<?= $_POST['correo']; ?>', celular: '<?= $_POST['celular']; ?>', edad: '<?= $_POST['edad']; ?>', departamento: '<?= $_POST['departamento']; ?>', provincia: '<?= $_POST['provincia']; ?>', distrito: '<?= $_POST['distrito']; ?>', grado: '<?= $_POST['grado']; ?>', labora: '<?= $_POST['labora']; ?>', cargo: '<?= $_POST['cargo']; ?>', areas: '<?= $_POST['areas']; ?>', redes: '<?= $_POST['redes']; ?>', institucion: '<?= $_POST['institucion']; ?>', labora_futuro: '<?= $_POST['labora_futuro']; ?>',
+		<?php else: ?>
 		usuario: '', nombres: '', apellidos: '', dni: '', correo: '', celular: '', edad: '', departamento: '', provincia: '', distrito: '', grado: '', labora: '', cargo: '', areas: '', redes: '', institucion: '', labora_futuro: '',
+		<?php endif; ?>
 		
 		faltaUsuario:false, faltaNombre: false, faltaApellidos:false, faltaDni:false, faltaCorreo:false, faltaCelular:false, faltaEdad: false, faltaDepartamento: false, faltaProvincia: false, faltaDistrito: false, faltaGrado: false, faltaLabora: false, faltaCargo: false, faltaInstitucion: false, faltaLabora_futuro: false, faltaAreas: false, faltaRedes: false, listaDepartamentos:[], listaProvincias:[], listaDistritos:[], depaSeleccionado:-1, proviSeleccionado:-1,
 	},
