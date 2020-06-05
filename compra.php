@@ -191,6 +191,8 @@
 			<h5>Centro educativo: Adem Perú</h5>
 			<h5>Total: S/ <?= $precioCurso; ?></h5> -->
 			<div class="d-flex justify-content-end">
+			
+				<button class="btn btn-primary btn-lg rounded-0" onclick="$('#modalPagoBien').modal('show');">Probar ventana</button>
 				<button class="btn btn-secondary btn-lg rounded-0" id="btnEmpezarPago">Completar pago</button>
 			</div>
 			<div class="d-flex justify-content-end align-items-center mt-2">

@@ -38,10 +38,10 @@ if($_POST){
 		$idUsuario = wp_create_user($usuario, '', $correo);
 
 		/*Guardando nombre completo del usuario en la DB */
-		$server="localhost";
-		$username="oxlrrisl_adem";
-		$password="Mantis1322!";
-		$db = "oxlrrisl_adem";
+		$server="";
+		$username="";
+		$password="";
+		$db = "";
 		$cadena= mysqli_connect($server,$username,$password)or die("No se ha podido establecer la conexion");
 		$sdb= mysqli_select_db($cadena,$db)or die("La base de datos no existe");
 		$cadena->set_charset("utf8");
@@ -113,6 +113,12 @@ if( strlen($error)>0){
 		left: calc(50% - 217px);
 		color: #12266d;
 	}
+	#cbox1{
+		width: 18px!important;
+    height: 18px;
+    margin-top: 10px;
+    padding: 2px!important;
+	}
 </style>
 <link rel="stylesheet" href="https://ademperu.com/cursos/css/animate.css">
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -154,6 +160,8 @@ if( strlen($error)>0){
 				<option v-for="distri in listaDistritos" v-if="distri.province_id == proviSeleccionado  && distri.department_id == depaSeleccionado " :value="distri.name" :data-valor="distri.id">{{distri.name}}</option>
 			</select>
 		</div>
+
+		<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">  
 		
 		<div class="cajaBoton" data-prox="2" @click="validar(2)">
 			<span><i class="fa fa-chevron-right" aria-hidden="true"></i> <span>Continuar</span> </span>
@@ -187,6 +195,10 @@ if( strlen($error)>0){
 				<option value="otros">Otros</option>
 			</select>
 		</div>
+		
+		<label><input type="checkbox" id="cbox1" value="first_checkbox"> <span>Acepto: <a href="https://ademperu.com/terminos-y-condiciones/">TÉRMINOS Y CONDICIONES</a> | <a href="https://ademperu.com/politicas-de-privacidad/">POLITICAS DE PRIVACIDAD</a></span></label><br>
+
+
 		<div class="cajaBoton" data-prox="-1"  @click="validar(4)">
 			<span><i class="fa fa-save" aria-hidden="true"></i> <span>Registrarse</span> </span>
 		</div>
@@ -204,6 +216,7 @@ if( strlen($error)>0){
 
 
 <script>
+
 var app = new Vue({
   el: '#divFormularioPrimero',
 	data: {
@@ -248,6 +261,7 @@ var app = new Vue({
 			if(hacia==4){
 				if(this.areas==''){ this.faltaAreas=true; }
 				else if(this.redes==''){ this.faltaRedes=true; }
+				else if( ! jQuery('#cbox1').prop('checked') ){ jQuery('#cbox1').css('border-color', 'red'); }
 				else{
 					jQuery('#overlay').css('display', 'block');
 					jQuery('#formPrincipal').submit();

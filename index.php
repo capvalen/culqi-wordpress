@@ -54,6 +54,9 @@ require('fpdf/fpdf.php');
 $pdf = new FPDF();
 $pdf->AddPage();
 
+$pdf->SetTitle('Certificado ADEM PERÚ');
+
+
 //Img fondo
 $pdf->Image('imgs/modelo_fondo.png',0,0, 210, 300);
 
@@ -67,24 +70,30 @@ $pdf->Cell($w,9,$nombre );
 
 
 $pdf->SetFont('Arial','B',24);
-$pdf->SetXY(35, 110);
+$pdf->SetXY(0, 100);
 $titulo = utf8_decode( $tituloCurso );
 $w = $pdf->GetStringWidth( $titulo )+6;
-$pdf->SetX((210-$w)/2);
-$pdf->Cell($w,9,$titulo );
+
+if($w>=200){
+	$pdf->MultiCell( 210,15, $titulo, 0, 'C' );
+}else{
+	$pdf->SetX((210-$w)/2);
+	$pdf->Cell($w,9,$titulo );
+}
 
 
+$pdf->SetXY(20, 110);
 $pdf->SetFont('Arial', '', 12);
 $pdf->SetX(15);
 
 
-$pdf->Cell(15,70, utf8_decode( 'Desarrollado el día ' . $fechaComienza->format('d') ." de " . $meses[$fechaComienza->format('n')-1] . ' del ' .$fechaComienza->format('Y') . ', desarrollado en la modalidad  Online,'));
+$pdf->Cell(15,70, utf8_decode( 'Desarrollado el día ' . $fechaComienza->format('d') ." de " . $meses[$fechaComienza->format('n')-1] . ' del ' .$fechaComienza->format('Y') . ', desarrollado en la modalidad  Online, con una duración'));
 $pdf->SetX(15);
-$pdf->Cell(15,81, utf8_decode('con una duración de ' . $rowDuracion['meta_value'] . ' académicas, organizado por la Academia de Desarrollo Profesional '));
+$pdf->Cell(15,81, utf8_decode('de ' . $rowDuracion['meta_value'] . ' académicas, organizado por la Academia de Desarrollo Profesional y Emprendimiento '));
 $pdf->SetX(15);
-$pdf->Cell(15,91, utf8_decode('y Emprendimiento en colaboración con la Asociación ASOROS'));
+$pdf->Cell(15,91, utf8_decode('en colaboración con la Asociación ASOROS'));
 
-$pdf->SetFont('Arial', '', 14);
+$pdf->SetFont('Arial', '', 12);
 $pdf->SetXY(120, 200);
 $pdf->Cell(55,10, utf8_decode('Huancayo, ' . $fechaFin->format('d') ." de " . $meses[$fechaFin->format('n')-1] . ' del ' .$fechaFin->format('Y') ));
 
