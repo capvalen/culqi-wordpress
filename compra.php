@@ -34,7 +34,7 @@
 			<div>
 				<strong><span>975 585 816 </span> <span>ayuda@ademperu.com</span></strong>
 			</div>
-			<div>
+			<div class="d-none">
 				<strong><a class="px-2" href="https://ademperu.com/formulario-cuenta" >Regístrese</a> <a href="https://ademperu.com/wp-login.php">Inicio de sesión</a></strong>
 			</div>
 		</div>
@@ -177,11 +177,27 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>#<?= $idPostInterno; ?></td>
+							<td id="divPostInt">#<?= $idPostInterno; ?></td>
 							<td><?= $tituloCurso; ?></td>
 							<td>Adem Perú</td>
 							<td data-precio="<?= $precioCurso; ?>">S/ <?= number_format($precioCurso, 2); ?></td>
 							<td data-precio="<?= $precioEspecial; ?>">S/ <?= number_format($precioEspecial, 2); ?></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><label for="">Tipo de pago</label>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="exampleRadios" id="radioBanco" value="banco" onclick="$('#btnPagoCuentas').removeClass('d-none');$('#btnEmpezarPago').addClass('d-none');">
+								<label class="form-check-label" for="radioBanco">Depósito Bancario</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="exampleRadios" id="radioTarjeta" value="tarjeta" onclick="$('#btnEmpezarPago').removeClass('d-none');$('#btnPagoCuentas').addClass('d-none');" checked>
+								<label class="form-check-label" for="radioTarjeta">Pago con tajeta débito/crédito</label>
+							</div>
+							</td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</tbody>
 				</table>
@@ -192,8 +208,9 @@
 			<h5>Total: S/ <?= $precioCurso; ?></h5> -->
 			<div class="d-flex justify-content-end">
 			
-				<button class="btn btn-primary btn-lg rounded-0" onclick="$('#modalPagoBien').modal('show');">Probar ventana</button>
+				<button class="d-none btn btn-primary btn-lg rounded-0" onclick="$('#modalPagoBien').modal('show');">Probar ventana</button>
 				<button class="btn btn-secondary btn-lg rounded-0" id="btnEmpezarPago">Completar pago</button>
+				<button class="btn btn-secondary btn-lg rounded-0 d-none" id="btnPagoCuentas">Completar pago</button>
 			</div>
 			<div class="d-flex justify-content-end align-items-center mt-2">
 				<p class="text-muted text-right pr-3">Procesador de compras <br> <strong>© Team Culqi</strong></p> 
@@ -237,6 +254,29 @@
 				<h3 class="text-center">Pago no aceptado</h3>
 				<p class="text-center">Hay un error con la plataforma y la tarjeta de débito/crédito. Por favor revisa tu estado de cuenta, y si encuentras algo que no va bien, comunícate con soporte para que activemos tu cuenta manualmente. Gracias y disculpe los inconvenientes</p>
 				<a class="btn btn-secondary btn-block" href="https://ademperu.com/">Salir</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modalCuentas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true" data-backdrop="static" >
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">		
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<img src="img/ilustracion-vectorial-pago-impuestos-linea_95561-82.jpg" alt="" class="img-fluid">
+				<h4 class="modal-title mb-4 display-4" id="my-modal-title">Depósito bancario</h4>
+				<p><strong>Instrucciones para el pago:</strong> </p>
+				<p>Tiene las cuentas bancarias para realizar el pago por el curso, una vez realizado el pago, envíe una foto del voucher al número de contacto <strong>975 585 816</strong> con el código <strong id="strCodigo"></strong></p>
+				<ul>
+					<li><strong>BCP:</strong> <span>355-98897650-0-51</span></li>
+					<li><strong>BBVA:</strong> <span>0011-0266-47-0200208207</span></li>
+					<li><strong>Interbank:</strong> <span>8983148368980</span></li>
+					<li><strong>De la Nación:</strong> <span>04-388-511821</span></li>
+				</ul>
+				<p></p>
+				<p>Todas las cuentas son de ahorro a nombre de <strong>Gonzales Rojas</strong></p>
 			</div>
 		</div>
 	</div>
@@ -310,6 +350,10 @@
 		});
 	});
 <?php } ?>
+$('#btnPagoCuentas').click(function(){
+	$('#strCodigo').text( $('#divPostInt').text() );
+	$('#modalCuentas').modal('show');
+});
 </script>
 
 </body>
