@@ -22,12 +22,12 @@
     background-color: #062650;
     border-color: #062650;
 	}
-	#btnEmpezarPago{
+	/* #btnEmpezarPago{
 		background-color: #15171a;
 	}
 	#btnEmpezarPago:hover{
 		background-color: #122d44;
-	}
+	} */
 	</style>
 	<section id="franja" class="container-fluid py-3">
 		<div class="container d-flex justify-content-between">
@@ -41,7 +41,7 @@
 	</section>
 	<section id="franaja-negra" class="container-fluid py-3">
 		<div class="container">
-			<img src="img/2020-05-08114342.png" alt="">
+			<a href="https://ademperu.com"><img src="img/2020-05-08114342.png" alt=""></a>
 		</div>
 	</section>
 	<section id="franaja-azul" class="container-fluid py-3">
@@ -161,8 +161,10 @@
 		
 
 			?>
-			<p>Ud. Está empezando el proceso de pago de un curso registrado en AdemPerú.</p>
-			<p>A continuación se le solicitará los datos de su tarjeta, una vez aprobado el pago en los servidores, Ud. podrá empezar inmediatamente el curso elegido.</p>
+			<p>Este es el último paso para la compra de tu curso. Usted tiene 2 opciones de pago, los mismos que se hallan en la parte inferior:</p>
+			<p> 1. Modo DEPÓSITO BANCARIO consiste en hacer un deposito en las cuentas que se le indicaremos</p>
+			<p> 2. Modo PAGO CON TARJETA DÉBITO/CRÉDITO, consiste en pagar directamente con cualquier tipo de tarjeta.</p>
+			
 			<p>Detalles de la compra:</p>
 			<div class="table-responsive">
 				<table class="table table-hover">
@@ -180,12 +182,12 @@
 							<td id="divPostInt">#<?= $idPostInterno; ?></td>
 							<td><?= $tituloCurso; ?></td>
 							<td>Adem Perú</td>
-							<td data-precio="<?= $precioCurso; ?>">S/ <?= number_format($precioCurso, 2); ?></td>
+							<td data-precio="<?= $precioCurso; ?>">S/ <?php if(floatval($precioEspecial)>0){ echo "<span><strike>" . number_format($precioCurso, 2) . "<strike></span>"; }else{ number_format($precioCurso, 2); } ?></td>
 							<td data-precio="<?= $precioEspecial; ?>">S/ <?= number_format($precioEspecial, 2); ?></td>
 						</tr>
 						<tr>
 							<td></td>
-							<td><label for="">Tipo de pago</label>
+							<td colspan="2"><label for=""><strong>Debe seleccionar el modo de pago</strong></label>
 							<div class="form-check">
 								<input class="form-check-input" type="radio" name="exampleRadios" id="radioBanco" value="banco" onclick="$('#btnPagoCuentas').removeClass('d-none');$('#btnEmpezarPago').addClass('d-none');">
 								<label class="form-check-label" for="radioBanco">Depósito Bancario</label>
@@ -196,11 +198,12 @@
 							</div>
 							</td>
 							<td></td>
-							<td></td>
+							
 							<td></td>
 						</tr>
 					</tbody>
 				</table>
+				
 			</div>
 			<!-- <h3>Pedido: #<?= $idPostInterno; ?> </h3>
 			<h3>Curso: <?= $tituloCurso; ?> </h3>
@@ -209,12 +212,20 @@
 			<div class="d-flex justify-content-end">
 			
 				<button class="d-none btn btn-primary btn-lg rounded-0" onclick="$('#modalPagoBien').modal('show');">Probar ventana</button>
-				<button class="btn btn-secondary btn-lg rounded-0" id="btnEmpezarPago">Completar pago</button>
-				<button class="btn btn-secondary btn-lg rounded-0 d-none" id="btnPagoCuentas">Completar pago</button>
+				<button class="btn btn-success btn-lg rounded-0" id="btnEmpezarPago">Completar pago</button>
+				<button class="btn btn-success btn-lg rounded-0 d-none" id="btnPagoCuentas">Completar pago</button>
 			</div>
-			<div class="d-flex justify-content-end align-items-center mt-2">
-				<p class="text-muted text-right pr-3">Procesador de compras <br> <strong>© Team Culqi</strong></p> 
-				<img src="img/1882900_original.jpg" alt="" width="50px">
+			
+			<div class="row d-flex justify-content-end mt-3">
+				<p class="text-muted text-right pr-3">Este procedimiento es completamente seguro, cuenta con la asistencia avanzada del antivirus Imunify 360, con Certificado SSL y con el sistema de codificación y seguridad de TEAM CULQUI.</p> 
+			</div>
+			<div class="row d-flex justify-content-end">
+				<div>
+					<img src="img/1882900_original.jpg" alt="" width="50px">
+					<img src="img/Imunify360-1.png" alt="" width="200px">
+					<img src="img/ssl-certificate.jpg" alt="" width="200px">
+				</div>
+
 			</div>
 
 			<?php
@@ -268,15 +279,16 @@
 				<img src="img/ilustracion-vectorial-pago-impuestos-linea_95561-82.jpg" alt="" class="img-fluid">
 				<h4 class="modal-title mb-4 display-4" id="my-modal-title">Depósito bancario</h4>
 				<p><strong>Instrucciones para el pago:</strong> </p>
-				<p>Tiene las cuentas bancarias para realizar el pago por el curso, una vez realizado el pago, envíe una foto del voucher al número de contacto <strong>975 585 816</strong> con el código <strong id="strCodigo"></strong></p>
+				<p>Este modo de pago, consiste en hacer el depósito en las cuentas bancarias indicadas; y una vez realizado, enviar en el comprobante de depósito al whatsapp del celular <strong>996 735382</strong> con el código <strong id="strCodigo"></strong></p>
+				<p>Posteriormente en un plazo de 1 hora procederemos a habilitar el curso, el mismo que será confirmado con el envío a su correo electrónico y al número de celular registrado. Gracias por su confianza Colega.</p>
 				<ul>
 					<li><strong>BCP:</strong> <span>355-98897650-0-51</span></li>
 					<li><strong>BBVA:</strong> <span>0011-0266-47-0200208207</span></li>
 					<li><strong>Interbank:</strong> <span>8983148368980</span></li>
-					<li><strong>De la Nación:</strong> <span>04-388-511821</span></li>
+					<li><strong>Banco de la Nación:</strong> <span>04-388-511821</span></li>
 				</ul>
 				<p></p>
-				<p>Todas las cuentas son de ahorro a nombre de <strong>Gonzales Rojas</strong></p>
+				<p>Todas las cuentas son en Soles y están a nombre de los apellidos: <strong>Gonzales Rojas</strong></p>
 			</div>
 		</div>
 	</div>

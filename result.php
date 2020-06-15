@@ -81,6 +81,8 @@ if ( $quiz_data->is_review_questions() ) {
 			$idCliente= usuario_id();
 			$curso = the_dramatist_return_post_id();
 			$url_link = "https://ademperu.com/certificados/index.php?cliente=". $idCliente . "&curso=". $curso ;
+
+			holaPeru($idCliente, $curso );
 			
 			learn_press_display_message( "</b></b><span class='dashicons dashicons-welcome-learn-more'></span> Bien aprobaste, ahora puedes <b><a href='{$url_link}' style='color: #8a6d3b;'><span class='dashicons dashicons-awards'></span> Descargar tu certificado aquí</a></b>" , 'warning' );
 		}
