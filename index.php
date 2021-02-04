@@ -75,7 +75,9 @@ $titulo = utf8_decode( $tituloCurso );
 $w = $pdf->GetStringWidth( $titulo )+6;
 
 if($w>=200){
-	$pdf->MultiCell( 210,15, $titulo, 0, 'C' );
+	$pdf->SetFont('Arial','B',20);
+	$pdf->SetX(10);
+	$pdf->MultiCell( 197, 10, $titulo, 0, 'C' );
 }else{
 	$pdf->SetX((210-$w)/2);
 	$pdf->Cell($w,9,$titulo );
@@ -87,14 +89,14 @@ $pdf->SetFont('Arial', '', 12);
 $pdf->SetX(15);
 
 
-$pdf->Cell(15,70, utf8_decode( 'Desarrollado el día ' . $fechaComienza->format('d') ." de " . $meses[$fechaComienza->format('n')-1] . ' del ' .$fechaComienza->format('Y') . ', desarrollado en la modalidad  Online, con una duración'));
+$pdf->Cell(15,70, utf8_decode( 'Desarrollado el día ' . $fechaComienza->format('d') ." de " . $meses[$fechaComienza->format('n')-1] . ' del ' .$fechaComienza->format('Y') . ', en la modalidad  Online, con una duración' . ' de ' . $rowDuracion['meta_value'] ));
 $pdf->SetX(15);
-$pdf->Cell(15,81, utf8_decode('de ' . $rowDuracion['meta_value'] . ' académicas, organizado por la Academia de Desarrollo Profesional y Emprendimiento '));
+$pdf->Cell(15,81, utf8_decode('académicas, organizado por la Academia de Desarrollo Profesional y Emprendimiento '));
 $pdf->SetX(15);
 $pdf->Cell(15,91, utf8_decode('en colaboración con la Asociación ASOROS'));
 
 $pdf->SetFont('Arial', '', 12);
-$pdf->SetXY(120, 200);
+$pdf->SetXY(120, 190);
 $pdf->Cell(55,10, utf8_decode('Huancayo, ' . $fechaFin->format('d') ." de " . $meses[$fechaFin->format('n')-1] . ' del ' .$fechaFin->format('Y') ));
 
 
